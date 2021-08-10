@@ -8,4 +8,11 @@
     <select id ="selectCoronaInfoByDate" resultType = "com.coronainfo.vo.CoronaInfoVO">
         select * from corona_info where stateTime>=str_to_date(#{date}, "%Y-%m-%d") limit 1;
     </select>
+    <insert id = "insertCoronaSido">
+        INSERT INTO corona_sido (deathCnt, defCnt, gubun, incDec, isolClearCnt, createDt, isolIngCnt, localOccCnt, overFlowCnt)
+        VALUES(#{deathCnt}, #{defCnt}, #{gubun}, #{incDec}, #{isolClearCnt}, #{createDt}, #{isolIngCnt}, #{localOccCnt}, #{overFlowCnt});
+    </insert>
+    <select id = "selectCoronaSidoByDate" resultType = "com.coronainfo.vo.CoronaSidoVO">
+         select * from corona_sido where createDt>=str_to_date(#{date}, "%Y-%m-%d") limit 1;
+    </select>
 </mapper>
