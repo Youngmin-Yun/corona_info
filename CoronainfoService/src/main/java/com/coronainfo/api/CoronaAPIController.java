@@ -4,6 +4,7 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -13,6 +14,8 @@ import com.coronainfo.service.CoronaInfoService;
 import com.coronainfo.vo.CoronaInfoVO;
 import com.coronainfo.vo.CoronaSidoVO;
 
+import org.apache.ibatis.annotations.ResultMap;
+import org.apache.ibatis.annotations.ResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -133,12 +136,16 @@ public class CoronaAPIController {
     @GetMapping("/api/coronaSido/{date}")
     public Map<String, Object> getCoronaSido(@PathVariable String date){
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
-        CoronaSidoVO data = null;
         if(date.equals("today")){
-            data = service.selectTodayCoronaSido();
+            List<CoronaSidoVO> list = service.selectTodayCoronaSido();
+            resultMap.put("status", true);
+            resultMap.put("data", list);
         }
-        resultMap.put("status", true);
-        resultMap.put("data", data);
+        else{
+            List<CoronaSidoVO> list = service.selectTodayCoronaSidoByDate(date);
+            resultMap.put("status", true);
+            resultMap.put("data", list);
+        }
         return resultMap;
     }
     public static String getTagValue(String tag, Element elem){

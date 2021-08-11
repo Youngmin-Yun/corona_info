@@ -2,9 +2,12 @@ package com.coronainfo.service;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import com.coronainfo.mapper.CoronaInfoMapper;
+import com.coronainfo.vo.CoronaAgeAndGenVO;
 import com.coronainfo.vo.CoronaInfoVO;
 import com.coronainfo.vo.CoronaSidoVO;
 
@@ -49,36 +52,26 @@ public class CoronaInfoService {
     public void insertCoronaSido(CoronaSidoVO vo){
         mapper.insertCoronaSido(vo);
     }
-    public CoronaSidoVO selectTodayCoronaSido(){
-        Date now = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        String date = formatter.format(now);
-        CoronaSidoVO data = mapper.selectCoronaSidoByDate(date);
-        Integer deathCnt = data.getDeathCnt();
-        Integer defCnt = data.getDefCnt();
-        Integer incDec = data.getIncDec();
-        Integer isolClearCnt = data.getIsolClearCnt();
-        Integer isolIngCnt = data.getIsolIngCnt();
-        Integer localOccCnt = data.getLocalOccCnt();
-        Integer overFlowCnt = data.getOverFlowCnt();
+    public List<CoronaSidoVO> selectTodayCoronaSido(){
+        Calendar now = Calendar.getInstance();
+        Calendar standard = Calendar.getInstance();
+        standard.set(Calendar.HOUR, 10);
+        standard.set(Calendar.MINUTE, 30);
+        standard.set(Calendar.SECOND, 10);
 
-        DecimalFormat dFormatter = new DecimalFormat("###,###,###");
-        String strDeathCnt = dFormatter.format(deathCnt);
-        String strDefCnt = dFormatter.format(defCnt);
-        String strIncDec = dFormatter.format(incDec);
-        String strIsolClearCnt = dFormatter.format(isolClearCnt);
-        String strIsolIngCnt = dFormatter.format(isolIngCnt);
-        String strLocalOccCnt = dFormatter.format(localOccCnt);
-        String strOverFlowCnt = dFormatter.format(overFlowCnt);
-
-        data.setStrDeathCnt(strDeathCnt);
-        data.setStrDefCnt(strDefCnt);
-        data.setStrIncDec(strIncDec);
-        data.setStrIsolClearCnt(strIsolClearCnt);
-        data.setStrIsolIngCnt(strIsolIngCnt);
-        data.setStrLocalOccCnt(strLocalOccCnt);
-        data.setStrOverFlowCnt(strOverFlowCnt);
-        
-        return data;
+        if(now.getTimeInMillis() < standard.getTimeInMillis()){
+            // 현재 접속시간이 기준시간보다 이전일때
+            // 하루 전 날의 날짜로 변경하고 정보를 가져온다.
+            now.add(Calendar.DATE, -1);
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+        String dt = formatter.format(now.getTime());
+        return mapper.selectCoronaSidoByDate(dt);
+    }
+    public List<CoronaSidoVO> selectTodayCoronaSidoByDate(String date){
+        return mapper.selectCoronaSidoByDate(date);
+    }
+    public void insertAgeAndGen(CoronaAgeAndGenVO vo){
+        mapper.insertCoronaAgeGen(vo);
     }
 }

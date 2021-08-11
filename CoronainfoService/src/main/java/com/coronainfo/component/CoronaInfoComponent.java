@@ -70,7 +70,7 @@ public class CoronaInfoComponent {
             service.insertCoronaInfo(vo);
         }
     }
-    @Scheduled(cron="0 30 10 * * *")
+    @Scheduled(cron="10 30 10 * * *")
     public void getCoronaSido()throws Exception{
         Date dt = new Date();
         SimpleDateFormat dtFormatter = new SimpleDateFormat("YYYYMMdd");

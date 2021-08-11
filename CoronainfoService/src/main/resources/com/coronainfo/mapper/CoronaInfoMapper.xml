@@ -8,11 +8,20 @@
     <select id ="selectCoronaInfoByDate" resultType = "com.coronainfo.vo.CoronaInfoVO">
         select * from corona_info where stateTime>=str_to_date(#{date}, "%Y-%m-%d") limit 1;
     </select>
+    
     <insert id = "insertCoronaSido">
         INSERT INTO corona_sido (deathCnt, defCnt, gubun, incDec, isolClearCnt, createDt, isolIngCnt, localOccCnt, overFlowCnt)
         VALUES(#{deathCnt}, #{defCnt}, #{gubun}, #{incDec}, #{isolClearCnt}, #{createDt}, #{isolIngCnt}, #{localOccCnt}, #{overFlowCnt});
     </insert>
     <select id = "selectCoronaSidoByDate" resultType = "com.coronainfo.vo.CoronaSidoVO">
-         select * from corona_sido where createDt>=str_to_date(#{date}, "%Y-%m-%d") limit 1;
+        select * from corona_sido where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '합계'
+    </select>
+    
+    <insert id = "insertCoronaAgeGen">
+        INSERT INTO corona_age_and_gen (confCase, confCaseRate, createDt, criticalRate, death, deathRate, gubun)
+        VALUES(#{confCase}, #{confCaseRate}, #{createDt}, #{criticalRate}, #{death}, #{deathRate}, #{gubun});
+    </insert>
+    <select id = "selectCoronaAgeAndGenByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
+        select * from corona_age_and_gen where createDt>=str_to_date(#{date}, "%Y-%m-%d") and gubun != '합계' order by defCnt desc;
     </select>
 </mapper>
