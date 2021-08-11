@@ -21,7 +21,10 @@
         INSERT INTO corona_age_and_gen (confCase, confCaseRate, createDt, criticalRate, death, deathRate, gubun)
         VALUES(#{confCase}, #{confCaseRate}, #{createDt}, #{criticalRate}, #{death}, #{deathRate}, #{gubun});
     </insert>
-    <select id = "selectCoronaAgeAndGenByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
-        select * from corona_age_and_gen where createDt>=str_to_date(#{date}, "%Y-%m-%d") and gubun != '합계' order by defCnt desc;
+    <select id = "selectCoronaAgeByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
+        select * from corona_age_and_gen where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '남성' and gubun != '여성';
+    </select>
+    <select id = "selectCoronaGenByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
+    select * from corona_age_and_gen where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun = '남성' &amp; '여성' and gubun != '0-9';
     </select>
 </mapper>

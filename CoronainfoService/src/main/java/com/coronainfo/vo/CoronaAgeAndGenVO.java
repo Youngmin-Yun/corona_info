@@ -8,10 +8,10 @@ import lombok.Data;
 public class CoronaAgeAndGenVO {
     private Integer seq;
     private Integer confCase;
-    private Integer confCaseRate;
+    private Double confCaseRate;
     private Date createDt;
-    private Integer criticalRate;
+    private Double criticalRate;
     private Integer death;
-    private Integer deathRate;
+    private Double deathRate;
     private String gubun;
 }

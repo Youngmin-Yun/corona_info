@@ -17,7 +17,7 @@ $(function () {
                     labels: ["양성", "음성"],
                     datasets: [{
                         label: "양성/음성",
-                        data: [r.data.decideCnt, r.data.examCnt-r.data.decideCnt],
+                        data: [r.data.decideCnt, r.data.examCnt - r.data.decideCnt],
                         backgroundColor: ['green', 'blue', 'red']
                     }]
                 },
@@ -25,50 +25,50 @@ $(function () {
         }
     })
     $.ajax({
-        type:"get",
-        url:"/api/coronaSido/today",
-        success: function(r){
+        type: "get",
+        url: "/api/coronaSido/today",
+        success: function (r) {
             console.log(r)
             let sidoName = new Array()
             let defCnt = new Array()
 
-            for(let i = 0; i<6; i++){
+            for (let i = 0; i < 6; i++) {
                 let tag = "<tbody class='region-tbody'></tbody>"
                 $(".region_confirm_tbl").append(tag)
             }
-            for(let i = 0; i<r.data.length; i++){
+            for (let i = 0; i < r.data.length; i++) {
                 let sido = r.data[i].gubun
                 let cnt = r.data[i].incDec
                 sidoName.push(sido)
                 defCnt.push(cnt)
-                console.log(Math.floor(i/3))
-                let page = Math.floor(i/3)
-                let tag = 
-                '<tr>'+
-                    '<td>'+r.data[i].gubun+'</td>'+
-                    '<td>'+r.data[i].defCnt+'</td>'+
-                    '<td>'+r.data[i].incDec+' ▲</td>'+
-                '</tr>'
+                console.log(Math.floor(i / 3))
+                let page = Math.floor(i / 3)
+                let tag =
+                    '<tr>' +
+                    '<td>' + r.data[i].gubun + '</td>' +
+                    '<td>' + r.data[i].defCnt + '</td>' +
+                    '<td>' + r.data[i].incDec + ' ▲</td>' +
+                    '</tr>'
                 $(".region-tbody").eq(page).append(tag)
             }
             $(".region-tbody").eq(0).addClass("active")
 
-            $("#region_next").click(function(){
+            $("#region_next").click(function () {
                 let currentPage = Number($(".current").html())
                 currentPage++
-                if(currentPage > 6) currentPage = 6;
+                if (currentPage > 6) currentPage = 6;
                 $(".current").html(currentPage)
                 $(".region-tbody").removeClass("active")
-                $(".region-tbody").eq(currentPage-1).addClass("active")
+                $(".region-tbody").eq(currentPage - 1).addClass("active")
 
             })
-            $("#region_prev").click(function(){
+            $("#region_prev").click(function () {
                 let currentPage = Number($(".current").html())
                 currentPage--
-                if(currentPage < 1) currentPage = 1;
+                if (currentPage < 1) currentPage = 1;
                 $(".current").html(currentPage)
                 $(".region-tbody").removeClass("active")
-                $(".region-tbody").eq(currentPage-1).addClass("active")
+                $(".region-tbody").eq(currentPage - 1).addClass("active")
 
             })
             let ctx = $("#regional_status")
@@ -88,7 +88,68 @@ $(function () {
             })
         }
     })
-
+    $.ajax({
+        type: "get",
+        url: "/api/coronaAge/today",
+        success: function (r) {
+            console.log(r)
+            let age = new Array();
+            let conf = new Array();
+            for (let i = 0; i < r.data.length; i++) {
+                let years = r.data[i].gubun
+                let confCase = r.data[i].confCase
+                age.push(years)
+                conf.push(confCase)
+            }
+            let ctx4 = $("#age_chart")
+            let ageChart = new Chart(ctx4, {
+                type: 'bar',
+                options: {
+                    responsive: false
+                },
+                data: {
+                    labels: age,
+                    datasets: [{
+                        label: "2021-08-09 신규확진",
+                        data: conf,
+                        backgroundColor: ['green', 'blue', 'red']
+                    }]
+                }
+            })
+        }
+    })
+    $.ajax({
+        type: "get",
+        url: "/api/coronaGen/today",
+        success: function (r) {
+            console.log(r)
+            // let gender = r.data.gubun
+            let gender = new Array()
+            let conf = new Array()
+            // let confCase = r.data.confCase
+            for (let i = 0; i < r.data.length; i++) {
+                let gen = r.data[i].gubun
+                let confCase = r.data[i].confCase
+                gender.push(gen)
+                conf.push(confCase)
+            }
+            let ctx5 = $("#gen_chart")
+            let gender_chart = new Chart(ctx5, {
+                type: 'pie',
+                options: {
+                    responsive: false
+                },
+                data: {
+                    labels: gender,
+                    datasets: [{
+                        label: "양성/음성",
+                        data: conf,
+                        backgroundColor: ['blue', 'red']
+                    }]
+                }
+            })
+        }
+    })
     let ctx3 = $("#vaccine_chart")
     let vaccineChart = new Chart(ctx3, {
         type: 'bar',
@@ -113,6 +174,4 @@ $(function () {
             ]
         }
     })
-
-
 })

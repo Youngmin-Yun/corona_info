@@ -21,6 +21,7 @@ public class CoronaInfoService {
     public void insertCoronaInfo(CoronaInfoVO vo){
         mapper.insertCoronaInfo(vo);
     }
+
     public CoronaInfoVO selectTodayCoronaInfo(){
         // Calendar start = Calendar.getInstance();
         // Calendar end = Calendar.getInstance();
@@ -49,9 +50,11 @@ public class CoronaInfoService {
         
         return data;
     }
+
     public void insertCoronaSido(CoronaSidoVO vo){
         mapper.insertCoronaSido(vo);
     }
+
     public List<CoronaSidoVO> selectTodayCoronaSido(){
         Calendar now = Calendar.getInstance();
         Calendar standard = Calendar.getInstance();
@@ -68,10 +71,46 @@ public class CoronaInfoService {
         String dt = formatter.format(now.getTime());
         return mapper.selectCoronaSidoByDate(dt);
     }
+
     public List<CoronaSidoVO> selectTodayCoronaSidoByDate(String date){
         return mapper.selectCoronaSidoByDate(date);
     }
+
     public void insertAgeAndGen(CoronaAgeAndGenVO vo){
         mapper.insertCoronaAgeGen(vo);
+    }
+    public List<CoronaAgeAndGenVO> selectTodayCoronaAge(){
+        Calendar now = Calendar.getInstance();
+        Calendar standard = Calendar.getInstance();
+        standard.set(Calendar.HOUR, 10);
+        standard.set(Calendar.MINUTE, 30);
+        standard.set(Calendar.SECOND, 10);
+
+        if(now.getTimeInMillis() < standard.getTimeInMillis()){
+            now.add(Calendar.DATE, -1);
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+        String dt = formatter.format(now.getTime());
+        return mapper.selectCoronaAgeByDate(dt);
+    }
+    public List<CoronaAgeAndGenVO> selectCoronaAgeByDate(String date){
+        return mapper.selectCoronaAgeByDate(date);
+    }
+    public List<CoronaAgeAndGenVO> selectTodayCoronaGen(){
+        Calendar now = Calendar.getInstance();
+        Calendar standard = Calendar.getInstance();
+        standard.set(Calendar.HOUR, 10);
+        standard.set(Calendar.MINUTE, 30);
+        standard.set(Calendar.SECOND, 10);
+
+        if(now.getTimeInMillis() < standard.getTimeInMillis()){
+            now.add(Calendar.DATE, -1);
+        }
+        SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+        String dt = formatter.format(now.getTime());
+        return mapper.selectCoronaGenByDate(dt);
+    }
+    public List<CoronaAgeAndGenVO> selectCoronaGenByDate(String date){
+        return mapper.selectCoronaGenByDate(date);
     }
 }

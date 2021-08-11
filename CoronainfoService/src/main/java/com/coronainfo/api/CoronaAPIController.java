@@ -11,11 +11,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.coronainfo.service.CoronaInfoService;
+import com.coronainfo.vo.CoronaAgeAndGenVO;
 import com.coronainfo.vo.CoronaInfoVO;
 import com.coronainfo.vo.CoronaSidoVO;
 
-import org.apache.ibatis.annotations.ResultMap;
-import org.apache.ibatis.annotations.ResultType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,7 +29,7 @@ import org.w3c.dom.NodeList;
 public class CoronaAPIController {
     @Autowired
     CoronaInfoService service;
-
+    // 코로나 현황
     @GetMapping("/api/corona")
     public Map<String, Object> getCoronaInfo(@RequestParam String startDt, @RequestParam String endDt)throws Exception{
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -88,6 +87,7 @@ public class CoronaAPIController {
         resultMap.put("data", data);
         return resultMap;
     }
+    // 시도별 감염 현황
     @GetMapping("/api/coronaSido")
     public Map<String, Object> getCoronaSido(@RequestParam String startDt, @RequestParam String endDt)throws Exception{
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -133,6 +133,7 @@ public class CoronaAPIController {
         resultMap.put("message", "데이터가 입력되었습니다.");
         return resultMap;
     }
+    // 시도별 감염자 날짜 검색
     @GetMapping("/api/coronaSido/{date}")
     public Map<String, Object> getCoronaSido(@PathVariable String date){
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
@@ -148,6 +149,83 @@ public class CoronaAPIController {
         }
         return resultMap;
     }
+
+    @GetMapping("/api/corona/ageAndgen")
+    public Map<String, Object> getCoronaAgeAndGen(@RequestParam String startDt, @RequestParam String endDt)throws Exception{
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19GenAgeCaseInfJson"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=Qvh%2FPxBBmg3Pp64QitOr7PScIkH25vOjdehJK4Fr4N2ITDAoFZl7TONz6l%2Bovat%2BrMpoRgfFwWIXMssHOkAmVw%3D%3D"); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode("-", "UTF-8")); /*공공데이터포털에서 받은 인증키*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10000", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode(startDt, "UTF-8")); /*검색할 생성일 범위의 시작*/
+        urlBuilder.append("&" + URLEncoder.encode("endCreateDt","UTF-8") + "=" + URLEncoder.encode(endDt, "UTF-8")); /*검색할 생성일 범위의 종료*/
+
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document doc = docBuilder.parse(urlBuilder.toString());
+
+        doc.getDocumentElement().normalize();
+        NodeList nList = doc.getElementsByTagName("item");
+        if(nList.getLength() <= 0){
+            resultMap.put("status", false);
+            resultMap.put("message", "데이터가 없습니다.");
+            return resultMap;
+        }
+        for(int i = 0; i < nList.getLength(); i++){
+            Node node = nList.item(i);
+            Element elem = (Element) node;
+            CoronaAgeAndGenVO vo = new CoronaAgeAndGenVO();
+            vo.setConfCase(Integer.parseInt(getTagValue("confCase", elem)));
+            vo.setConfCaseRate(Double.parseDouble(getTagValue("confCaseRate", elem)));
+            vo.setGubun(getTagValue("gubun", elem));
+            vo.setCriticalRate(Double.parseDouble(getTagValue("criticalRate", elem)));
+            vo.setDeath(Integer.parseInt(getTagValue("death", elem)));
+            vo.setDeathRate(Double.parseDouble(getTagValue("deathRate", elem)));
+            // String to Date
+            Date dt = new Date();
+            SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dt = dtFormat.parse(getTagValue("createDt", elem));
+            vo.setCreateDt(dt);
+            service.insertAgeAndGen(vo);
+        }
+        resultMap.put("status", true);
+        resultMap.put("message", "데이터가 입력되었습니다.");
+
+        return resultMap;
+    }
+    @GetMapping("/api/coronaAge/{date}")
+    public Map<String, Object> getCoronaAgeByDate(@PathVariable String date){
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        if(date.equals("today")){
+            List<CoronaAgeAndGenVO> list = service.selectTodayCoronaAge();
+            resultMap.put("status", true);
+            resultMap.put("data", list);
+        }
+        else{
+            List<CoronaAgeAndGenVO> list = service.selectCoronaAgeByDate(date);
+            resultMap.put("status", true);
+            resultMap.put("data", list);
+        }
+        return resultMap;
+    }
+    @GetMapping("/api/coronaGen/{date}")
+    public Map<String, Object> getCoronaGenByDate(@PathVariable String date){
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        if(date.equals("today")){
+            List<CoronaAgeAndGenVO> list = service.selectTodayCoronaGen();
+            resultMap.put("status", true);
+            resultMap.put("data", list);
+        }
+        else{
+            List<CoronaAgeAndGenVO> list = service.selectCoronaGenByDate(date);
+            resultMap.put("status", true);
+            resultMap.put("data", list);
+        }
+        return resultMap;
+    }
+
+
     public static String getTagValue(String tag, Element elem){
         NodeList nlList = elem.getElementsByTagName(tag).item(0).getChildNodes();
         if(nlList == null) return null;

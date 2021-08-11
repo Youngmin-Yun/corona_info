@@ -17,5 +17,6 @@ public interface CoronaInfoMapper {
     public List<CoronaSidoVO> selectCoronaSidoByDate(String date);
 
     public void insertCoronaAgeGen(CoronaAgeAndGenVO vo);
-    public CoronaAgeAndGenVO selectCoronaAgeAndGenByDate();
+    public List<CoronaAgeAndGenVO> selectCoronaAgeByDate(String date);
+    public List<CoronaAgeAndGenVO> selectCoronaGenByDate(String date);
 }
