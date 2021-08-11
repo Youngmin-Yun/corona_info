@@ -86,15 +86,15 @@ public class CoronaAPIController {
         return resultMap;
     }
     @GetMapping("/api/coronaSido")
-    public Map<String, Object> getCoronaSido()throws Exception{
+    public Map<String, Object> getCoronaSido(@RequestParam String startDt, @RequestParam String endDt)throws Exception{
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("ServiceKey","UTF-8") + "=Qvh%2FPxBBmg3Pp64QitOr7PScIkH25vOjdehJK4Fr4N2ITDAoFZl7TONz6l%2Bovat%2BrMpoRgfFwWIXMssHOkAmVw%3D%3D"); /*Service Key*/
         urlBuilder.append("&" + URLEncoder.encode("ServiceKey","UTF-8") + "=" + URLEncoder.encode("-", "UTF-8")); /*공공데이터포털에서 받은 인증키*/
         urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
         urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("10000", "UTF-8")); /*한 페이지 결과 수*/
-        urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode("20200410", "UTF-8")); /*검색할 생성일 범위의 시작*/
-        urlBuilder.append("&" + URLEncoder.encode("endCreateDt","UTF-8") + "=" + URLEncoder.encode("20210810", "UTF-8")); /*검색할 생성일 범위의 종료*/
+        urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode(startDt, "UTF-8")); /*검색할 생성일 범위의 시작*/
+        urlBuilder.append("&" + URLEncoder.encode("endCreateDt","UTF-8") + "=" + URLEncoder.encode(endDt, "UTF-8")); /*검색할 생성일 범위의 종료*/
         
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -130,7 +130,17 @@ public class CoronaAPIController {
         resultMap.put("message", "데이터가 입력되었습니다.");
         return resultMap;
     }
-
+    @GetMapping("/api/coronaSido/{date}")
+    public Map<String, Object> getCoronaSido(@PathVariable String date){
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        CoronaSidoVO data = null;
+        if(date.equals("today")){
+            data = service.selectTodayCoronaSido();
+        }
+        resultMap.put("status", true);
+        resultMap.put("data", data);
+        return resultMap;
+    }
     public static String getTagValue(String tag, Element elem){
         NodeList nlList = elem.getElementsByTagName(tag).item(0).getChildNodes();
         if(nlList == null) return null;

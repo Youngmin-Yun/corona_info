@@ -1,7 +1,6 @@
 package com.coronainfo.controller;
 
 import com.coronainfo.service.CoronaInfoService;
-import com.coronainfo.vo.CoronaInfoVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
