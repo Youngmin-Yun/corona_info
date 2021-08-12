@@ -14,7 +14,7 @@
         VALUES(#{deathCnt}, #{defCnt}, #{gubun}, #{incDec}, #{isolClearCnt}, #{createDt}, #{isolIngCnt}, #{localOccCnt}, #{overFlowCnt});
     </insert>
     <select id = "selectCoronaSidoByDate" resultType = "com.coronainfo.vo.CoronaSidoVO">
-        select * from corona_sido where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '합계'
+        select * ,date_format(createDt,"%Y-%m-%d") as dt from corona_sido where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '합계';
     </select>
     
     <insert id = "insertCoronaAgeGen">
@@ -23,7 +23,7 @@
     </insert>
     <select id = "selectCoronaAgeByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
         <!-- select * from corona_age_and_gen where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '남성' and gubun != '여성'; -->
-        select * ,case 
+        select *,date_format(createDt,"%Y-%m-%d") as dt ,case 
         when gubun ='0-9' then '0대' 
         when gubun ='10-19' then '10대' 
         when gubun ='20-29' then '20대' 
@@ -39,6 +39,12 @@
         and gubun != '남성' and gubun != '여성' order by createDt desc;
     </select>
     <select id = "selectCoronaGenByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
-        select * from corona_age_and_gen where (gubun ='여성' or gubun = '남성') and date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d");
+        select * from corona_age_and_gen where (gubun = '남성' or gubun ='여성') and date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d");
+    </select>
+    <insert id = "insertCoronaVaccineInfo">
+        INSERT INTO corona_vaccine (accFirstCnt, accSecondCnt, regDt, firstCnt, secondCnt, sido) VALUES(#{accFirstCnt}, #{accSecondCnt}, #{regDt}, #{firstCnt}, #{secondCnt}, #{sido});
+    </insert>
+    <select id = "selectCoronaVaccineInfo" resultType = "com.coronainfo.vo.CoronaVaccineInfoVO">
+        select * from corona_vaccine where date_format(regDt,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d") and sido != '전국';
     </select>
 </mapper>

@@ -16,4 +16,6 @@ public class CoronaSidoVO {
     private Integer isolIngCnt;
     private Integer localOccCnt;
     private Integer overFlowCnt;
+
+    private String dt;
 }

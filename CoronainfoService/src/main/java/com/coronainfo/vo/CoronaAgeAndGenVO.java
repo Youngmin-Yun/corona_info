@@ -16,4 +16,5 @@ public class CoronaAgeAndGenVO {
     private String gubun;
 
     private String ages;
+    private String dt;
 }

@@ -31,7 +31,7 @@ $(function () {
             console.log(r)
             let sidoName = new Array()
             let defCnt = new Array()
-
+            let date = new Array()
             for (let i = 0; i < 6; i++) {
                 let tag = "<tbody class='region-tbody'></tbody>"
                 $(".region_confirm_tbl").append(tag)
@@ -39,8 +39,10 @@ $(function () {
             for (let i = 0; i < r.data.length; i++) {
                 let sido = r.data[i].gubun
                 let cnt = r.data[i].incDec
+                let dt = r.data[i].dt
                 sidoName.push(sido)
                 defCnt.push(cnt)
+                date.push(dt)
                 console.log(Math.floor(i / 3))
                 let page = Math.floor(i / 3)
                 let tag =
@@ -80,7 +82,7 @@ $(function () {
                 data: {
                     labels: sidoName,
                     datasets: [{
-                        label: "2021-08-09 지역별 신규확진",
+                        label: date[0] + " 기준 지역별신규확진",
                         data: defCnt,
                         backgroundColor: ['green', 'blue', 'red']
                     }]
@@ -95,11 +97,14 @@ $(function () {
             console.log(r)
             let age = new Array();
             let conf = new Array();
+            let dt = new Array();
             for (let i = 0; i < r.data.length; i++) {
                 let years = r.data[i].ages
                 let confCase = r.data[i].confCase
+                let day = r.data[i].dt
                 age.push(years)
                 conf.push(confCase)
+                dt.push(day)
             }
             let ctx4 = $("#age_chart")
             let ageChart = new Chart(ctx4, {
@@ -110,7 +115,7 @@ $(function () {
                 data: {
                     labels: age,
                     datasets: [{
-                        label: "2021-08-09 연령대별 신규확진",
+                        label: dt[0] + " 기준 연령대별신규확진",
                         data: conf,
                         backgroundColor: ['green', 'blue', 'red']
                     }]
@@ -123,10 +128,8 @@ $(function () {
         url: "/api/coronaGen/today",
         success: function (r) {
             console.log(r)
-            // let gender = r.data.gubun
             let gender = new Array()
             let conf = new Array()
-            // let confCase = r.data.confCase
             for (let i = 0; i < r.data.length; i++) {
                 let gen = r.data[i].gubun
                 let confCase = r.data[i].confCase
@@ -142,7 +145,7 @@ $(function () {
                 data: {
                     labels: gender,
                     datasets: [{
-                        label: "양성/음성",
+                        label: "남/녀",
                         data: conf,
                         backgroundColor: ['blue', 'red']
                     }]
@@ -150,28 +153,43 @@ $(function () {
             })
         }
     })
-    let ctx3 = $("#vaccine_chart")
-    let vaccineChart = new Chart(ctx3, {
-        type: 'bar',
-        options: {
-            responsive: false
-        },
-        data: {
-            labels: ["전국", "서울특별시", "부산광역시", "대구광역시", "광주광역시", "대전광역시", "인천광역시", "울산광역시",
-                "세종특별자치시", "경기도", "강원도", "충청북도", "충청남도", "전라북도", "전라남도", "경상북도", "경상남도",
-                "제주특별자치도"
-            ],
-            datasets: [{
-                    label: "2021-08-09 1차 접종현황",
-                    data: [415, 408, 86, 65, 123, 88, 30, 68, 24, 42, 39, 19, 25, 21, 14, 11, 1],
-                    backgroundColor: ['green']
+    $.ajax({
+        type: "get",
+        url: "/api/coronaVaccine/today",
+        success: function (r) {
+            console.log(r)
+            let sido = new Array()
+            let first = new Array()
+            let second = new Array()
+            for(let i = 0; i<r.data.length; i++){
+                let city = r.data[i].sido
+                let frt = r.data[i].firstCnt
+                let sec = r.data[i].secondCnt
+                sido.push(city)
+                first.push(frt)
+                second.push(sec)
+            }
+            let ctx3 = $("#vaccine_chart")
+            let vaccineChart = new Chart(ctx3, {
+                type: 'bar',
+                options: {
+                    responsive: false
                 },
-                {
-                    label: "2021-08-09 2차 접종현황",
-                    data: [415, 408, 86, 65, 123, 88, 30, 68, 24, 42, 39, 19, 25, 21, 14, 11, 1],
-                    backgroundColor: ['blue']
+                data: {
+                    labels: sido,
+                    datasets: [{
+                            label: "2021-08-09 1차 접종현황",
+                            data: first,
+                            backgroundColor: ['green']
+                        },
+                        {
+                            label: "2021-08-09 2차 접종현황",
+                            data: second,
+                            backgroundColor: ['blue']
+                        }
+                    ]
                 }
-            ]
+            })
         }
     })
 })
