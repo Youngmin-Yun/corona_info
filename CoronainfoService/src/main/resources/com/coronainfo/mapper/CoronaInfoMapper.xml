@@ -22,9 +22,23 @@
         VALUES(#{confCase}, #{confCaseRate}, #{createDt}, #{criticalRate}, #{death}, #{deathRate}, #{gubun});
     </insert>
     <select id = "selectCoronaAgeByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
-        select * from corona_age_and_gen where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '남성' and gubun != '여성';
+        <!-- select * from corona_age_and_gen where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun != '남성' and gubun != '여성'; -->
+        select * ,case 
+        when gubun ='0-9' then '0대' 
+        when gubun ='10-19' then '10대' 
+        when gubun ='20-29' then '20대' 
+        when gubun ='30-39' then '30대' 
+        when gubun ='40-49' then '40대' 
+        when gubun ='50-59' then '50대' 
+        when gubun ='60-69' then '60대' 
+        when gubun ='70-79' then '70대' 
+        when gubun ='80 이상' then '80대 이상' 
+        end as ages
+        from corona_age_and_gen 
+        where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") 
+        and gubun != '남성' and gubun != '여성' order by createDt desc;
     </select>
     <select id = "selectCoronaGenByDate" resultType = "com.coronainfo.vo.CoronaAgeAndGenVO">
-    select * from corona_age_and_gen where date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d") and gubun = '남성' &amp; '여성' and gubun != '0-9';
+        select * from corona_age_and_gen where (gubun ='여성' or gubun = '남성') and date_format(createDt,"%Y-%m-%d") = str_to_date(#{date}, "%Y-%m-%d");
     </select>
 </mapper>

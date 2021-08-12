@@ -14,4 +14,6 @@ public class CoronaAgeAndGenVO {
     private Integer death;
     private Double deathRate;
     private String gubun;
+
+    private String ages;
 }

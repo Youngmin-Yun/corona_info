@@ -114,7 +114,7 @@ public class CoronaInfoComponent {
         }
     }
 
-    @Scheduled(cron = "15 30 10 * * *")
+    @Scheduled(cron = "0 50 14 * * *")
     public void getCoronaAgeAndGen()throws Exception{
         Date dt = new Date();
         SimpleDateFormat dtFormatter = new SimpleDateFormat("YYYYMMdd");

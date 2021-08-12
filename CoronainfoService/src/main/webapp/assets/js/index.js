@@ -80,7 +80,7 @@ $(function () {
                 data: {
                     labels: sidoName,
                     datasets: [{
-                        label: "2021-08-09 신규확진",
+                        label: "2021-08-09 지역별 신규확진",
                         data: defCnt,
                         backgroundColor: ['green', 'blue', 'red']
                     }]
@@ -96,7 +96,7 @@ $(function () {
             let age = new Array();
             let conf = new Array();
             for (let i = 0; i < r.data.length; i++) {
-                let years = r.data[i].gubun
+                let years = r.data[i].ages
                 let confCase = r.data[i].confCase
                 age.push(years)
                 conf.push(confCase)
@@ -110,7 +110,7 @@ $(function () {
                 data: {
                     labels: age,
                     datasets: [{
-                        label: "2021-08-09 신규확진",
+                        label: "2021-08-09 연령대별 신규확진",
                         data: conf,
                         backgroundColor: ['green', 'blue', 'red']
                     }]

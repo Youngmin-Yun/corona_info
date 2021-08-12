@@ -173,8 +173,9 @@ public class CoronaAPIController {
             return resultMap;
         }
         for(int i = 0; i < nList.getLength(); i++){
-            Node node = nList.item(i);
-            Element elem = (Element) node;
+            // Node node = nList.item(i);
+            // Element elem = (Element) node;
+            Element elem = (Element)nList.item(i);
             CoronaAgeAndGenVO vo = new CoronaAgeAndGenVO();
             vo.setConfCase(Integer.parseInt(getTagValue("confCase", elem)));
             vo.setConfCaseRate(Double.parseDouble(getTagValue("confCaseRate", elem)));

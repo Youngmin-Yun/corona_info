@@ -82,9 +82,9 @@ public class CoronaInfoService {
     public List<CoronaAgeAndGenVO> selectTodayCoronaAge(){
         Calendar now = Calendar.getInstance();
         Calendar standard = Calendar.getInstance();
-        standard.set(Calendar.HOUR, 10);
-        standard.set(Calendar.MINUTE, 30);
-        standard.set(Calendar.SECOND, 10);
+        standard.set(Calendar.HOUR, 15);
+        standard.set(Calendar.MINUTE, 00);
+        standard.set(Calendar.SECOND, 00);
 
         if(now.getTimeInMillis() < standard.getTimeInMillis()){
             now.add(Calendar.DATE, -1);
@@ -99,9 +99,9 @@ public class CoronaInfoService {
     public List<CoronaAgeAndGenVO> selectTodayCoronaGen(){
         Calendar now = Calendar.getInstance();
         Calendar standard = Calendar.getInstance();
-        standard.set(Calendar.HOUR, 10);
-        standard.set(Calendar.MINUTE, 30);
-        standard.set(Calendar.SECOND, 10);
+        standard.set(Calendar.HOUR, 15);
+        standard.set(Calendar.MINUTE, 00);
+        standard.set(Calendar.SECOND, 00);
 
         if(now.getTimeInMillis() < standard.getTimeInMillis()){
             now.add(Calendar.DATE, -1);
