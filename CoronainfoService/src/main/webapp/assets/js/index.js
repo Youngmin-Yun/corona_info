@@ -1,5 +1,4 @@
 $(function () {
-
     $.ajax({
         type: "get",
         url: "/api/coronaInfo/today",
@@ -160,14 +159,21 @@ $(function () {
             console.log(r)
             let sido = new Array()
             let first = new Array()
+            // let accFirst = new Array()
             let second = new Array()
+            // let accSecond = new Array()
+            let date = new Array()
             for(let i = 0; i<r.data.length; i++){
-                let city = r.data[i].sido
+                let city = r.data[i].region
                 let frt = r.data[i].firstCnt
                 let sec = r.data[i].secondCnt
+                let dt = r.data[i].dt
+                // accFirst += r.data[i].accFirstCnt
+                // accSecond += r.data[i].accSecondCnt
                 sido.push(city)
                 first.push(frt)
                 second.push(sec)
+                date.push(dt)
             }
             let ctx3 = $("#vaccine_chart")
             let vaccineChart = new Chart(ctx3, {
@@ -178,12 +184,12 @@ $(function () {
                 data: {
                     labels: sido,
                     datasets: [{
-                            label: "2021-08-09 1차 접종현황",
+                            label: date[0]+" 1차 접종현황",
                             data: first,
                             backgroundColor: ['green']
                         },
                         {
-                            label: "2021-08-09 2차 접종현황",
+                            label: date[0]+" 2차 접종현황",
                             data: second,
                             backgroundColor: ['blue']
                         }

@@ -18,4 +18,5 @@ public class CoronaSidoVO {
     private Integer overFlowCnt;
 
     private String dt;
+    private Integer diff;
 }

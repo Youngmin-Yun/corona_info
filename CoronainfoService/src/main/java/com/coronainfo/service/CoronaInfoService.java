@@ -84,7 +84,7 @@ public class CoronaInfoService {
         Calendar now = Calendar.getInstance();
         Calendar standard = Calendar.getInstance();
         standard.set(Calendar.HOUR_OF_DAY, 15);
-        standard.set(Calendar.MINUTE, 00);
+        standard.set(Calendar.MINUTE, 31);
         standard.set(Calendar.SECOND, 00);
 
         if(now.getTimeInMillis() < standard.getTimeInMillis()){
@@ -101,7 +101,7 @@ public class CoronaInfoService {
         Calendar now = Calendar.getInstance();
         Calendar standard = Calendar.getInstance();
         standard.set(Calendar.HOUR_OF_DAY, 15); // 24시간 기준, HOUR 쓰면 12시간 기준
-        standard.set(Calendar.MINUTE, 00);
+        standard.set(Calendar.MINUTE, 31);
         standard.set(Calendar.SECOND, 00);
 
         if(now.getTimeInMillis() < standard.getTimeInMillis()){
