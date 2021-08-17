@@ -1,0 +1,11 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd.mybatis-3-mapper.dtd">
+<mapper namespace = "com.coronainfo.mapper.VaccineCenterMapper">
+    <insert id = "insertCoronaVaccineCenter">
+    INSERT INTO corona_center (address, centerName, centerType, createdAt, facilityName, lat, lng, org, phoneNumber, sido, sigungu)
+    VALUES(#{address}, #{centerName}, #{centerType}, #{createdAt}, #{facilityName}, #{lat}, #{lng}, #{org}, #{phoneNumber}, #{sido}, #{sigungu});
+    </insert>
+    <select id = "selectVaccineCenter" resultType = "com.coronainfo.vo.VaccineCenterVO">
+    SELECT * from corona_center WHERE sido = #{region};
+    </select>
+</mapper>

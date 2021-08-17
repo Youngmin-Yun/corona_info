@@ -25,7 +25,7 @@ public class RegionalAPIController {
         Map<String, Object> resutlMap = new LinkedHashMap<String, Object>();
         if(date == null){
             Date now = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("yyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             date = formatter.format(now);
         }
         CoronaSidoVO vo = service.selectRegionalCoronaInfo(region, date);
