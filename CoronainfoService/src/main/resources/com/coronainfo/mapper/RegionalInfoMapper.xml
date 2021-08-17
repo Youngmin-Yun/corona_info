@@ -7,30 +7,66 @@
         	    (
         		    select incDec from corona_sido
         		    where date_format(createDt ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
-        		    and gubun = #{region}
+        		    and gubun = #{region} limit 1
         		)-(
         		    select incDec from corona_sido
         		    where date_format(createDt ,"%Y-%m-%d") = date_sub( str_to_date(#{date},"%Y-%m-%d"), interval 1 day)
-        		    and gubun = #{region}
+        		    and gubun = #{region} limit 1
         		)	
             )as diff
             from corona_sido where date_format(createDt ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
-            and gubun = #{region}
+            and gubun = #{region} limit 1
     </select>
 	<select id = "selectCoronaInfoRegionTotal" resultType = "com.coronainfo.vo.CoronaInfoVO">
 		select * ,(
 		(
 			select decideCnt from corona_info 
-			where date_format(stateTime, "%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
+			where date_format(stateTime, "%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d") limit 1
 		)-(
 			select decideCnt from corona_info 
-			where date_format(stateTime, "%Y-%m-%d") = date_sub( str_to_date(#{date},"%Y-%m-%d"), interval 1 day)
+			where date_format(stateTime, "%Y-%m-%d") = date_sub( str_to_date(#{date},"%Y-%m-%d"), interval 1 day) limit 1
 		)
 		) as diff
-		from corona_info where date_format(stateTime ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
+		from corona_info where date_format(stateTime ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d") limit 1
 	</select>
 	<select id ="selectCoronaVaccineStatus" resultType = "com.coronainfo.vo.CoronaVaccineInfoVO">
 		select * from corona_vaccine where DATE_FORMAT(regDt ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
 		and sido = #{region};
+	</select>
+	<select id = "selectDangerAge" resultType = "java.lang.String">
+		select gubun from(
+		select (avg(confCaseRate) + avg(deathRate))/2 as danger, gubun ,case 
+		when gubun ='0-9' then '0대' 
+		when gubun ='10-19' then '10대' 
+		when gubun ='20-29' then '20대' 
+		when gubun ='30-39' then '30대' 
+		when gubun ='40-49' then '40대' 
+		when gubun ='50-59' then '50대' 
+		when gubun ='60-69' then '60대' 
+		when gubun ='70-79' then '70대' 
+		when gubun ='80 이상' then '80대 이상' 
+		end as ages
+		from corona_age_and_gen 
+		where gubun != '남성' and gubun != '여성' <![CDATA[
+		and date_format(createDt ,"%Y-%m-%d") <= str_to_date(#{date},"%Y-%m-%d")]]> 
+		group by gubun order by danger desc limit 1
+		) a
+	</select>
+	<select id = "selectRegionalCoronaTwoWeeks" resultType = "com.coronainfo.vo.CoronaWeeksVO">
+		select date_sub(date_format(createDt ,"%Y-%m-%d"), interval 1 day)as date, defCnt from corona_sido where gubun = #{region} and 
+		<![CDATA[
+		date_format(createDt ,"%Y-%m-%d") <= str_to_date(#{date},"%Y-%m-%d")
+		and
+		date_format(createDt ,"%Y-%m-%d") > date_sub(str_to_date(#{date},"%Y-%m-%d"), interval 14 day)
+		order by createDt asc]]>
+	</select>
+	<select id ="selectRegionalVaccineTwoWeeks" resultType = "com.coronainfo.vo.CoronaWeeksVO">
+		select date_sub(date_format(regDt ,"%Y-%m-%d"), interval 1 day) date, (accFirstCnt+firstCnt) as accFirstCnt, (accSecondCnt+secondCnt) as accSecondCnt from corona_vaccine
+		where sido = #{region} and 
+		<![CDATA[
+		date_format(regDt ,"%Y-%m-%d") <= str_to_date(#{date},"%Y-%m-%d")
+		and
+		date_format(regDt ,"%Y-%m-%d") > date_sub(str_to_date(#{date},"%Y-%m-%d"), interval 14 day)
+		order by regDt asc]]>
 	</select>
 </mapper>

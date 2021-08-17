@@ -19,4 +19,9 @@ public class CoronaSidoVO {
 
     private String dt;
     private Integer diff;
+
+    private String strDefCnt;
+    private String strIncDec;
+    private String strIsolClearCnt;
+    private String strIsolingCnt;
 }

@@ -1,9 +1,12 @@
 package com.coronainfo.service;
 
+import java.util.List;
+
 import com.coronainfo.mapper.RegionalInfoMapper;
 import com.coronainfo.vo.CoronaInfoVO;
 import com.coronainfo.vo.CoronaSidoVO;
 import com.coronainfo.vo.CoronaVaccineInfoVO;
+import com.coronainfo.vo.CoronaWeeksVO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,5 +23,14 @@ public class RegionlInfoService {
     }
     public CoronaVaccineInfoVO selectCoronaVaccineStatus(String region, String date){
         return mapper.selectCoronaVaccineStatus(region, date);
+    }
+    public String selectDangerAge(String date){
+        return mapper.selectDangerAge(date);
+    }
+    public List<CoronaWeeksVO> selectRegionalCoronaTwoWeeks (String region, String date){
+        return mapper.selectRegionalCoronaTwoWeeks(region, date);
+    }
+    public List<CoronaWeeksVO> selectRegionalVaccineTwoWeeks (String region, String date){
+        return mapper.selectRegionalVaccineTwoWeeks(region, date);
     }
 }

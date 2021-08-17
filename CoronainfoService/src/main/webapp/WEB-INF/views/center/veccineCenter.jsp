@@ -39,7 +39,7 @@ pageEncoding="UTF-8"%>
                 </select>
                 <span class="veccineCenter">
                     <span>백신 센터 :  </span>
-                    <span class="veccineCenter_location">서울특별시</span>
+                    <span class="veccineCenter_location">서울특별시</span><span>예방접종센터</span>
                 </span>
             </div>
             <div id="map" style="width:810px;height:400px;"></div>
