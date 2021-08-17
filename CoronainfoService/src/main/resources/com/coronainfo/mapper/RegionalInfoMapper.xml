@@ -29,4 +29,8 @@
 		) as diff
 		from corona_info where date_format(stateTime ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
 	</select>
+	<select id ="selectCoronaVaccineStatus" resultType = "com.coronainfo.vo.CoronaVaccineInfoVO">
+		select * from corona_vaccine where DATE_FORMAT(regDt ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d")
+		and sido = #{region};
+	</select>
 </mapper>

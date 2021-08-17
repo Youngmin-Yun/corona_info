@@ -16,4 +16,7 @@ public class CoronaVaccineInfoVO {
 
     private String dt;
     private String region;
+
+    private String firstshot;
+    private String secondshot;
 }
