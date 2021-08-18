@@ -7,8 +7,7 @@ pageEncoding="UTF-8"%>
     <link rel="stylesheet" href="/assets/css/consignedCenter.css">
     <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/assets/js/consignedCenter.js"></script>
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b40d652ae780432c573066035ce0a983"></script>
-    <script type="text/javascript" src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=b40d652ae780432c573066035ce0a983&libraries=services,clusterer,drawing"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	b40d652ae780432c573066035ce0a983&libraries=services"></script>
     <title>백신 위탁 접종센터</title>
 </head>
 

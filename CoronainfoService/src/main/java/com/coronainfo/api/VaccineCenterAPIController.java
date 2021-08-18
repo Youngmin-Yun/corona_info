@@ -170,7 +170,7 @@ public class VaccineCenterAPIController {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         adr = adr+"%";
         List<ConsignedCenterVO> List = c_serivce.selectConsignedCenter(adr);
-        System.out.println(adr);
+        
         resultMap.put("List", List);
         return resultMap;
     }
