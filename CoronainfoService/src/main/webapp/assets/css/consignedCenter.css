@@ -1,0 +1,19 @@
+.right_area {
+    width: 830px;  box-sizing: border-box; padding-left: 20px;
+}
+.right_area > div{
+    width: 100%; margin-bottom: 20px; position: relative;
+}
+.content_area , .content_head{font-family: "Noto Sans KR",sans-serif;}
+
+.content_area > div {display: inline-block; vertical-align: top; text-align: center; 
+                    padding:30px; box-sizing:border-box; background-color: #fff;
+                    margin-right: 20px; box-shadow: 0 0 10px rgba(0,0,0,0.2);}
+
+.content_area > div:last-child{margin-right: 0;}
+.content_area {font-size: 0;}
+
+.content_head select {padding:10px; font-family: "Noto Sans KR", sans-serif; font-size: 16px; font-weight: 700;
+    border: 1px solid #fff; box-shadow:  0 0 10px rgba(0,0,0,0.2); outline:none;}
+.content_head span { font-size: 20px; margin-left: 10px;}
+.content_head .distance_level {font-weight: 900; margin-left: 0;}

@@ -9,4 +9,8 @@ public class VaccineCenterController {
     public String getVeccineCenter(){
         return "/center/veccineCenter";
     }
+    @GetMapping("/vaccineCenter/consigned")
+    public String getConsignedCenter(){
+        return "/center/consignedCenter";
+    }
 }

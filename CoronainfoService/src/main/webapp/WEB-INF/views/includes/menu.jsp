@@ -28,7 +28,10 @@ pageEncoding="UTF-8"%>
                 <a href="#">Prediction Info <span>코로나예측정보</span></a>
             </li>
             <li>
-                <a href="/veccineCenter">Veccine Center Info <span>접종센터 정보</span></a>
+                <a href="/veccineCenter">Veccine Center <span>접종센터 정보</span></a>
+            </li>
+            <li>
+                <a href="/vaccineCenter/consigned">Consigned Center <span>위탁 접종센터</span></a>
             </li>
         </ul>
     </div>

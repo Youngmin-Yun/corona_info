@@ -1,0 +1,11 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd.mybatis-3-mapper.dtd">
+<mapper namespace = "com.coronainfo.mapper.ConsignedCenterMapper">
+<insert id = "insertConsignedCenter">
+    INSERT INTO corona_consigned_center (endTm, orgTlno, orgZipaddr, orgnm, sttTm)
+    VALUES(#{endTm}, #{orgTlno}, #{orgZipaddr}, #{orgnm}, #{sttTm});
+</insert>
+<select id ="selectConsignedCenter" resultType = "com.coronainfo.vo.ConsignedCenterVO">
+    select * from corona_consigned_center where orgZipaddr like #{adr};
+</select>
+</mapper>
