@@ -24,7 +24,10 @@ $(function () {
 					var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다  
 				for (let i = 0; i < r.data.length; i++) {
 					var positions = [{
-						content: r.data[i].facilityName,
+						content:  '<div style="width:200px;height:20px;text-align:center;padding:6px 0;">' + r.data[i].facilityName + '</div>' +
+						'<div>' + "센터명 : " + r.data[i].centerName + '</div>' +
+						'<div>' + "전화번호 : " + r.data[i].phoneNumber + '</div>' + 
+						'<div>' + "주소 : " + r.data[i].address + '</div>',
 						latlng: new kakao.maps.LatLng(r.data[i].lat, r.data[i].lng)
 
 					}]
