@@ -9,4 +9,7 @@ public class ConsignedCenterVO {
     private String orgZipaddr;
     private String orgnm;
     private String sttTm;
+    
+    private String Lat;
+    private String Lng;
 }

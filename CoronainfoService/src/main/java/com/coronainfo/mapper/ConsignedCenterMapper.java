@@ -10,4 +10,5 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ConsignedCenterMapper {
     public void insertConsignedCenter(ConsignedCenterVO vo);
     public List<ConsignedCenterVO> selectConsignedCenter(String adr);
+    public void getLatAndLng(String Lat, String Lng, Integer seq);
 }

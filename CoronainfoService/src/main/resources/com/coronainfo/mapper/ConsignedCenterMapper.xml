@@ -8,4 +8,7 @@
 <select id ="selectConsignedCenter" resultType = "com.coronainfo.vo.ConsignedCenterVO">
     select * from corona_consigned_center where orgZipaddr like #{adr};
 </select>
+<update id = "getLatAndLng">
+    UPDATE corona_consigned_center SET Lat=#{Lat}, Lng=#{Lng} WHERE seq=#{seq};
+</update>
 </mapper>

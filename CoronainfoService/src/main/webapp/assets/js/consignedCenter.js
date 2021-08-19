@@ -13,57 +13,61 @@ $(function () {
             url: "/api/corona/vaccineCenter/consigned/adr?adr=" + region,
             success: function (r) {
                 console.log(r)
-                var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-                    mapOption = {
-                        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                        level: 3 // 지도의 확대 레벨
-                    };
+                for (let i = 0; i < r.List.length; i++) {
+                    var mapContainer = document.getElementById('map'), // 지도를 표시할 div  
+                        mapOption = {
+                            center: new kakao.maps.LatLng(r.List[0].lat, r.List[0].lng), // 지도의 중심좌표
+                            level: 3 // 지도의 확대 레벨
+                        };
+                    console.log(r.List[0].lat, r.List[0].lng)
+                }
 
-                // 지도를 생성합니다    
-                var map = new kakao.maps.Map(mapContainer, mapOption);
+                var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+                for (let i = 0; i < r.List.length; i++) {
+                    
+                    // 마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다 
+                    var positions = [{
+                        content: '<div style="width:200px;height:20px;text-align:center;padding:6px 0;">' + r.List[i].orgnm + '</div>' +
+                            '<div>' + "전화번호 : " + r.List[i].orgTlno + '</div>' + 
+                            '<div>' + "진료 시작 : " + r.List[i].sttTm + '</div>' + 
+                            '<div>' + "진료 마감 : " + r.List[i].endTm + '</div>' +
+                            '<div>' + "주소 : " + r.List[i].orgZipaddr + '</div>',
+                        latlng: new kakao.maps.LatLng(r.List[i].lat, r.List[i].lng)
+                    }];
 
-                // 주소-좌표 변환 객체를 생성합니다
-                var geocoder = new kakao.maps.services.Geocoder();
-                for(let i = 0; i<r.List.length; i++){
-                // 주소로 좌표를 검색합니다
-                geocoder.addressSearch(r.List[i].orgZipaddr, function (result, status) {
-
-                    // 정상적으로 검색이 완료됐으면 
-                    if (status === kakao.maps.services.Status.OK) {
-
-                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                        // 결과값으로 받은 위치를 마커로 표시합니다
+                    for (var k = 0; k < positions.length; k++) {
+                        // 마커를 생성합니다
                         var marker = new kakao.maps.Marker({
-                            map: map,
-                            position: coords
+                            map: map, // 마커를 표시할 지도
+                            position: positions[k].latlng // 마커의 위치
                         });
 
-                        // 인포윈도우로 장소에 대한 설명을 표시합니다
+                        // 마커에 표시할 인포윈도우를 생성합니다 
                         var infowindow = new kakao.maps.InfoWindow({
-                            content: '<div style="width:200px;height:20px;text-align:center;padding:6px 0;">'+r.List[i].orgnm+'</div>'+
-                            '<div>'+"전화번호 : "+r.List[i].orgTlno+'</div>'+'<div>'+"진료 시작 : "+r.List[i].sttTm+'</div>'+'<div>'+"진료 마감 : "+r.List[i].endTm+'</div>'
+                            content: positions[k].content // 인포윈도우에 표시할 내용
                         });
-                        // infowindow.open(map, marker);
+
+                        // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
+                        // 이벤트 리스너로는 클로저를 만들어 등록합니다 
+                        // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
                         kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
-						kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-                        // 마커 이미지의 이미지 주소입니다
-					function makeOverListener(map, marker, infowindow) {
-						return function () {
-							infowindow.open(map, marker);
-						};
-					}
-					// 인포윈도우를 닫는 클로저를 만드는 함수입니다 
-					function makeOutListener(infowindow) {
-						return function () {
-							infowindow.close();
-						};
-					}
-                        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                        map.setCenter(coords);
+                        kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
                     }
-                });
-            }
+
+                    // 인포윈도우를 표시하는 클로저를 만드는 함수입니다 
+                    function makeOverListener(map, marker, infowindow) {
+                        return function () {
+                            infowindow.open(map, marker);
+                        };
+                    }
+
+                    // 인포윈도우를 닫는 클로저를 만드는 함수입니다 
+                    function makeOutListener(infowindow) {
+                        return function () {
+                            infowindow.close();
+                        };
+                    }
+                }
             }
         })
     }

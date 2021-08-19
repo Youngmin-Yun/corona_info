@@ -21,6 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -172,6 +173,15 @@ public class VaccineCenterAPIController {
         List<ConsignedCenterVO> List = c_serivce.selectConsignedCenter(adr);
         
         resultMap.put("List", List);
+        return resultMap;
+    }
+
+    @PatchMapping("/api/corona/vaccineCenter/consigned")
+    public Map<String, Object> getLatAndLng(@RequestParam Integer seq, @RequestParam String Lat, @RequestParam String Lng){
+        Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
+        c_serivce.getLatAndLng(Lat, Lng, seq);
+        resultMap.put("status", true);
+        resultMap.put("message", "좌표 입력 완료");
         return resultMap;
     }
 }

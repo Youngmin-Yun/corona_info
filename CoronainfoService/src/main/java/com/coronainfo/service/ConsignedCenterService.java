@@ -18,4 +18,7 @@ public class ConsignedCenterService {
     public List<ConsignedCenterVO> selectConsignedCenter(String adr){
         return mapper.selectConsignedCenter(adr);
     }
+    public void getLatAndLng(String Lat, String Lng, Integer seq){
+        mapper.getLatAndLng(Lat, Lng, seq);
+    }
 }
