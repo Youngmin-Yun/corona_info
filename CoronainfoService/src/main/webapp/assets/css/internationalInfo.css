@@ -1,0 +1,14 @@
+.right_area {
+    width: 830px;  box-sizing: border-box; padding-left: 20px;
+    
+}
+table td{
+    border-bottom: 1px solid #ccc;
+    padding: 10px;
+    vertical-align: middle; text-align: center;
+}
+table tr:nth-child(even){
+    background-color: rgba(128, 128, 128, 0.269);
+}
+table {min-width: 800px;}
+thead td{background-color: gray; color: #fff; border-color: gray;}
