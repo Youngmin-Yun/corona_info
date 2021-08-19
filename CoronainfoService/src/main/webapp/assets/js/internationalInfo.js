@@ -19,12 +19,14 @@ $(function () {
                 $(".country_table tbody").html("")
                 if (r.list != null) {
                     for (let i = 0; i < r.list.length; i++) {
+                        var time = r.list[i].createDt
+                        var dt = time.split("T")
                         let tag =
                             '<tr>' +
                             '<td id = "country_name">' + r.list[i].nationNm + '</td>' +
                             '<td id = "natDefCnt">' + comma(r.list[i].natDefCnt) + ' 명</td>' +
                             '<td id = "natDeathCnt">' + comma(r.list[i].natDeathCnt) + ' 명</td>' +
-                            '<td id = "stdDt">' + r.list[i].createDt + '</td>' +
+                            '<td id = "stdDt">' + dt[0] + '</td>' +
                             '</tr>'
                         $(".country_table tbody").append(tag);
                     }

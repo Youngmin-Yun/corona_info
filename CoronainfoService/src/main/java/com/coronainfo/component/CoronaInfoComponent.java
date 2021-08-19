@@ -2,8 +2,6 @@ package com.coronainfo.component;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -18,10 +16,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import com.coronainfo.service.CoronaInfoService;
+import com.coronainfo.service.InternationalInfoService;
 import com.coronainfo.vo.CoronaAgeAndGenVO;
 import com.coronainfo.vo.CoronaInfoVO;
 import com.coronainfo.vo.CoronaSidoVO;
 import com.coronainfo.vo.CoronaVaccineInfoVO;
+import com.coronainfo.vo.InternationalInfoVO;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,6 +36,8 @@ public class CoronaInfoComponent {
     // 매일 10시 30분에 한 번 호출
     @Autowired
     CoronaInfoService service;
+    @Autowired
+    InternationalInfoService i_service;
     @Scheduled(cron="0 30 10 * * *")
     public void getCoronaInfo()throws Exception{
         System.out.println("cron schedule");
@@ -228,6 +230,45 @@ public class CoronaInfoComponent {
         }
     }
 
+    @Scheduled(cron = "0 0 11 * * *")
+    public void getInternationalInfo()throws Exception{
+        Date day = new Date();
+        SimpleDateFormat dtFormatter = new SimpleDateFormat("yyyyMMdd");
+        String today = dtFormatter.format(day);
+        StringBuilder urlBuilder = new StringBuilder("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19NatInfStateJson"); /*URL*/
+        urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=Qvh%2FPxBBmg3Pp64QitOr7PScIkH25vOjdehJK4Fr4N2ITDAoFZl7TONz6l%2Bovat%2BrMpoRgfFwWIXMssHOkAmVw%3D%3D"); /*Service Key*/
+        urlBuilder.append("&" + URLEncoder.encode("serviceKey","UTF-8") + "=" + URLEncoder.encode("-", "UTF-8")); /*공공데이터포털에서 받은 인증키*/
+        urlBuilder.append("&" + URLEncoder.encode("pageNo","UTF-8") + "=" + URLEncoder.encode("1", "UTF-8")); /*페이지번호*/
+        urlBuilder.append("&" + URLEncoder.encode("numOfRows","UTF-8") + "=" + URLEncoder.encode("100000", "UTF-8")); /*한 페이지 결과 수*/
+        urlBuilder.append("&" + URLEncoder.encode("startCreateDt","UTF-8") + "=" + URLEncoder.encode(today, "UTF-8")); /*검색할 생성일 범위의 시작*/
+        urlBuilder.append("&" + URLEncoder.encode("endCreateDt","UTF-8") + "=" + URLEncoder.encode(today, "UTF-8")); /*검색할 생성일 범위의 종료*/
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+        Document doc = docBuilder.parse(urlBuilder.toString());
+
+        doc.getDocumentElement().normalize();
+        NodeList nList = doc.getElementsByTagName("item");
+        if(nList.getLength() <= 0){
+            return;
+        }
+        for(int i = 0; i < nList.getLength(); i++){
+            Node node = nList.item(i);
+            Element elem = (Element) node;
+            InternationalInfoVO vo = new InternationalInfoVO();
+            vo.setNatDeathCnt(Integer.parseInt(getTagValue("natDeathCnt", elem)));
+            vo.setNatDefCnt(Integer.parseInt(getTagValue("natDefCnt", elem)));
+            vo.setNationNm(getTagValue("nationNm", elem));
+            vo.setAreaNm(getTagValue("areaNm", elem));
+            Date dt = new Date();
+            SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            dt = dtFormat.parse(getTagValue("createDt", elem));
+            vo.setCreateDt(dt);
+            i_service.insertInternationalInfo(vo);
+        }
+
+        return;
+    }
+    
 
     public static String getTagValue(String tag, Element elem){
         NodeList nlList = elem.getElementsByTagName(tag).item(0).getChildNodes();
