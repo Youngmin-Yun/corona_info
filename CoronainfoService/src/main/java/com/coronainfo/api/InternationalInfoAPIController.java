@@ -74,14 +74,6 @@ public class InternationalInfoAPIController {
         Map<String, Object> resultMap = new LinkedHashMap<String, Object>();
         if(date == null||date.equals("")){
             Calendar now = Calendar.getInstance();
-            Calendar standard = Calendar.getInstance();
-            standard.set(Calendar.HOUR_OF_DAY, 11);
-            standard.set(Calendar.MINUTE, 00);
-            standard.set(Calendar.SECOND, 00);
-    
-            if(now.getTimeInMillis() < standard.getTimeInMillis()){
-                now.add(Calendar.DATE, -1);
-            }
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             date = formatter.format(now.getTime());
             service.selectInternationalCorona(continent, date);

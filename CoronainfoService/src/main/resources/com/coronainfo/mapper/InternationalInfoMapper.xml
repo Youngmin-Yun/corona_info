@@ -6,6 +6,12 @@
     </insert>
     <select id = "selectInternationalCorona" resultType = "com.coronainfo.vo.InternationalInfoVO">
         select * from corona_international where areaNm = #{continent} 
-        and date_format(createDt ,"%Y-%m-%d") = str_to_date(#{date},"%Y-%m-%d") group by nationNm ORDER BY natDefCnt desc 
+        and 
+        if(
+            date_format(createDt,"%Y-%m-%d")=str_to_date(#{date},"%Y-%m-%d"), 
+            str_to_date(#{date},"%Y-%m-%d"),
+            date_sub(str_to_date(#{date},"%Y-%m-%d"),interval 1 day)
+        )
+        group by nationNm  ORDER BY natDefCnt desc;
     </select>
 </mapper>
